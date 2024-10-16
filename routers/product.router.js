@@ -21,7 +21,7 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage: storage})
 
 // Get all products
-router.route('/').get(authenticate,getAllProducts).post(authenticate , authorize(['admin']),[
+router.route('/').get(getAllProducts).post(authenticate , authorize(['admin']),[
     upload.array('image' , 3),
     body('name').notEmpty().withMessage('Name is required'),
     body('price').notEmpty().withMessage('Price is required'),
