@@ -18,8 +18,8 @@ const createCheckoutSession = async (req, res) => {
           quantity: item.amount,
         })),
         mode: 'payment',
-        success_url: `http://localhost:3000/ecommerce-demo/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `http://localhost:3000/ecommerce-demo/cancel`,
+        success_url: `https://ecommerce-beta-ivory.vercel.app/success`,
+        cancel_url: `https://ecommerce-beta-ivory.vercel.app/`,
       });
   
       res.json({ id: session.id });
