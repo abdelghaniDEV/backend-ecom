@@ -1,6 +1,7 @@
 const Stripe = require('stripe');
 
-const stripe = Stripe('sk_test_51Px9ITFcvwzdK8OALJ3UGM4BrQi5Smg1Lv790ITXPHa2BjT9aBSXGIeJSpGhve6z4gfwpk7YfoIBpwimNhFrtRGE00fT3pwtk2')
+const stripe = Stripe(process.env.STRIPE_KEY_SECRET)
+console.log(process.env.CLIENT_URL)  
 
 const createCheckoutSession = async (req, res) => {
     try {
@@ -18,8 +19,8 @@ const createCheckoutSession = async (req, res) => {
           quantity: item.amount,
         })),
         mode: 'payment',
-        success_url: `https://ecommerce-beta-ivory.vercel.app/success`,
-        cancel_url: `https://ecommerce-beta-ivory.vercel.app/`,
+        success_url: `${process.env.CLIENT_URL}/success`,
+        cancel_url: `${process.env.CLIENT_URL}`,
       });
   
       res.json({ id: session.id });
