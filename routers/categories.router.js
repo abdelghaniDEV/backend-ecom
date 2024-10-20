@@ -24,7 +24,7 @@ const upload = multer({ storage: storage})
 
 // create a new category
 
-router.route('/').post(authenticate,authorize(["admin"]),checkCache,upload.single('image'),[ body('name').notEmpty().withMessage("Name is required")] ,createCategory).get(authenticate,getAllCategories)
+router.route('/').post(authenticate,authorize(["admin"]),upload.single('image'),[ body('name').notEmpty().withMessage("Name is required")] ,createCategory).get(authenticate,getAllCategories)
 router.route('/:categoryId').delete(authenticate,authorize(['admin']),deleteCategory).patch(authenticate,authorize(['admin']), upload.single('image'),updateCategory)
 
 

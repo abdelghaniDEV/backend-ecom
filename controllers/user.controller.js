@@ -34,7 +34,9 @@ const user = await User.findOne({_id : req.user.id},{password : false , __v : fa
 // create a new User
 const createUser = asyncWrapper(async (req, res, next) => {
   // validate the request body
+  const {firstName , lastName , email , password , role } = req.body;
 
+  console.log("file",req.file)
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -52,16 +54,14 @@ const createUser = asyncWrapper(async (req, res, next) => {
     return next(err);
   }
 
+  const dataUser = {...req.body}
   const HashedPassword = await bcrypt.hash(req.body.password, 10);
 
-  const newUser = new User({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    password: HashedPassword,
-    role: req.body.role,
-    image : req.file.path    
-  });
+  dataUser.password = HashedPassword;
+  console.log("data user",dataUser)
+  console.log(req.file)
+
+  const newUser = new User();
 
   await newUser.save();
 

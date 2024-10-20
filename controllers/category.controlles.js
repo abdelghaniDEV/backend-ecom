@@ -13,8 +13,8 @@ const createCategory = asyncWrapper(async (req, res, next) => {
     return next(err);
   }
   const dataCreated = {...req.body}
-  if(req.file) {
-    dataCreated.image = req.file.path;
+  if(req.file){
+    dataCreated.image = req.file
   }
   // validare the category already exists
   const category = await Category.findOne({ name: req.body.name });
@@ -26,7 +26,6 @@ const createCategory = asyncWrapper(async (req, res, next) => {
     };
     return next(err);
   }
-    console.log(req.file)
   const newCategory = new Category(dataCreated);
   await newCategory.save();
   res.status(201).json({ status: "SUCCESS", data: { category: newCategory } });
