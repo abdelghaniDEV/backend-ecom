@@ -30,7 +30,6 @@ router.route("/:userID").delete(authenticate, authorize(['admin']) , deleteUser 
 router
   .route("/register")
   .post( 
-    authorize(['admin']) ,
     upload.single('image'),
     [
       body("firstName").notEmpty().withMessage("firstName is required"),
@@ -40,7 +39,8 @@ router
         .isLength({ min: 6 })
         .withMessage("Password must be at least 6 characters long"),
     ],
-   
+    authenticate,
+    authorize(['admin']) ,
     createUser
   );
 router
