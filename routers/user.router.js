@@ -30,6 +30,7 @@ router.route("/:userID").delete(authenticate, authorize(['admin']) , deleteUser 
 router
   .route("/register")
   .post( 
+    authorize(['admin']) ,
     upload.single('image'),
     [
       body("firstName").notEmpty().withMessage("firstName is required"),
