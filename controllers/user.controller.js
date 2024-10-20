@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 const User = require("../models/users.model");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
+const cloudinary = require("cloudinary").v2;
 
 
 
@@ -34,10 +35,14 @@ const user = await User.findOne({_id : req.user.id},{password : false , __v : fa
 // create a new User
 const createUser = asyncWrapper(async (req, res, next) => {
   // validate the request body
-  const {firstName , lastName , email , password , role } = req.body;
 
-  console.log("file",req.file)
+
   const errors = validationResult(req);
+
+  const createData = {...req.body}
+  if(req.file) {
+    createData.image = req.file.path;
+  }
 
   if (!errors.isEmpty()) {
     const err = { status: "ERROR", message: errors.array(), statusCode: 500 };
@@ -54,14 +59,10 @@ const createUser = asyncWrapper(async (req, res, next) => {
     return next(err);
   }
 
-  const dataUser = {...req.body}
   const HashedPassword = await bcrypt.hash(req.body.password, 10);
+  createData.password = HashedPassword;
 
-  dataUser.password = HashedPassword;
-  console.log("data user",dataUser)
-  console.log(req.file)
-
-  const newUser = new User();
+  const newUser = new User(createData);
 
   await newUser.save();
 
@@ -104,9 +105,43 @@ const loginUser = asyncWrapper(async (req, res, next) => {
   });
 });
 
+// delet user 
+const deleteUser = async (req, res , next) => {
+  const user = await User.findByIdAndDelete(req.params.userID);
+  if (!user) {
+    const err = {
+      status: "ERROR",
+      message: "User not found",
+      statusCode: 404,
+    };
+    return next(err);
+  }
+  // delete image from cloudinay
+  if(user.image) {
+    const cleanUrl = user.image.split("?")[0];
+    const parts = cleanUrl.split("/");
+    const publicId = parts
+      .slice(parts.length - 2)
+      .join("/")
+      .split(".")[0];
+    cloudinary.uploader.destroy(publicId, (err, result) => {
+      if (err) {
+        console.log("Error deleting image from Cloudinary:", err);
+      } else {
+        console.log("Image deleted from cloudinary", result);
+      }
+  })
+}
+
+res
+    .status(200)
+    .json({ status: "SUCCESS", message: "user deleted successfully" });
+}
+
 module.exports = {
   getAllUsers,
   createUser,
   loginUser,
   getSingleUser,
+  deleteUser,
 };

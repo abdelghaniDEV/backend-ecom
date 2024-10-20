@@ -13,7 +13,6 @@ const createCategory = asyncWrapper(async (req, res, next) => {
     return next(err);
   }
   const dataCreated = {...req.body}
-  console.log(dataCreated);
   if(req.file){
     dataCreated.image = req.file.path
   }
