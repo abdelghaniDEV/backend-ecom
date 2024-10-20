@@ -26,7 +26,7 @@ const createCategory = asyncWrapper(async (req, res, next) => {
     };
     return next(err);
   }
-  console.log(req.file)
+    console.log(req.file)
   const newCategory = new Category(dataCreated);
   await newCategory.save();
   res.status(201).json({ status: "SUCCESS", data: { category: newCategory } });

@@ -7,8 +7,21 @@ const {
 } = require("../controllers/user.controller");
 const { body } = require("express-validator");
 const { authenticate } = require("../middleware/authMiddleware");
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('../config/cloudinaryConfig.js');
+const multer = require('multer');
 
 const router = express.Router();
+
+const storage = new CloudinaryStorage({
+  cloudinary : cloudinary,
+  params : {
+      folder : 'uploads',
+      allowedFormats : ['jpg' , 'png' , 'jpeg']
+  }
+})
+
+const upload = multer({ storage: storage})
 
 router.route("/").get(authenticate,getAllUsers);
 router.route("/:tokenID").get(authenticate, getSingleUser)
@@ -23,6 +36,7 @@ router
         .isLength({ min: 6 })
         .withMessage("Password must be at least 6 characters long"),
     ],
+    upload.single('image'),
     createUser
   );
 router

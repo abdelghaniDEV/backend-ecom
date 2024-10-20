@@ -23,6 +23,10 @@ const UsreShema = new mongoose.Schema({
         enum: ["admin", "user"],
         default: "user"
     },
+    image: {
+        type: String,
+        required: false,
+    },
     created_at: {
         type: Date,
         default: Date.now

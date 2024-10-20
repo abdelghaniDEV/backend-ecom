@@ -60,6 +60,7 @@ const createUser = asyncWrapper(async (req, res, next) => {
     email: req.body.email,
     password: HashedPassword,
     role: req.body.role,
+    image : req.file.path    
   });
 
   await newUser.save();
