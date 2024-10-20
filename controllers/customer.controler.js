@@ -15,7 +15,6 @@ const getAllCustomer = asyncWrapper(async (req, res, next) => {
       return acc + order.totalPrice; // إضافة totalPrice لكل طلب
     }, 0);
   });
-  setCache(req.originalUrl, customers)
   res.json({ status: "SUCCESS", data: { customers: customers } });
 });
 
