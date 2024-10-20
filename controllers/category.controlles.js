@@ -13,8 +13,9 @@ const createCategory = asyncWrapper(async (req, res, next) => {
     return next(err);
   }
   const dataCreated = {...req.body}
+  console.log(dataCreated);
   if(req.file){
-    dataCreated.image = req.file
+    dataCreated.image = req.file.path
   }
   // validare the category already exists
   const category = await Category.findOne({ name: req.body.name });
@@ -24,7 +25,7 @@ const createCategory = asyncWrapper(async (req, res, next) => {
       message: "Category already exists",
       statusCode: 400,
     };
-    
+
     return next(err);
   }
   const newCategory = new Category(dataCreated);
