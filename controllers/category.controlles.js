@@ -24,6 +24,7 @@ const createCategory = asyncWrapper(async (req, res, next) => {
       message: "Category already exists",
       statusCode: 400,
     };
+    
     return next(err);
   }
   const newCategory = new Category(dataCreated);
