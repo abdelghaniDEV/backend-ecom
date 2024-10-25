@@ -138,10 +138,41 @@ res
     .json({ status: "SUCCESS", message: "user deleted successfully" });
 }
 
+// update user 
+const updateUser = asyncWrapper (async (req, res, next) => {
+
+  // Prepare the update object
+  const updateData = {...req.body };
+
+  if(req.file) {
+    updateData.image = req.file.path;
+  }
+  
+  const user = await User.findByIdAndUpdate(
+    {_id : req.params.userID},
+    {
+      $set: {...updateData },
+    },
+    { new: true, runValidators: true }
+  );
+
+  if (!user) {
+    const err = {
+      status: "ERROR",
+      message: "User not found",
+      statusCode: 404,
+    };
+    return next(err);
+  }
+
+  res.json({ status: "SUCCESS", data: { user: user } });
+})
+
 module.exports = {
   getAllUsers,
   createUser,
   loginUser,
   getSingleUser,
   deleteUser,
+  updateUser,
 };

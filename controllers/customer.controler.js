@@ -12,7 +12,7 @@ const getAllCustomer = asyncWrapper(async (req, res, next) => {
   });
   customers.forEach(customer => {
     customer.totalAmount = customer.orders.reduce((acc, order) => {
-      return acc + order.totalPrice; // إضافة totalPrice لكل طلب
+      return acc + order.totalPrice; // 
     }, 0);
   });
   res.json({ status: "SUCCESS", data: { customers: customers } });
