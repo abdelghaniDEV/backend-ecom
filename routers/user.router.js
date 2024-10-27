@@ -6,6 +6,7 @@ const {
   getSingleUser,
   deleteUser,
   updateUser,
+  changePassword,
 } = require("../controllers/user.controller");
 const { body } = require("express-validator");
 const { authenticate, authorize } = require("../middleware/authMiddleware");
@@ -27,7 +28,7 @@ const upload = multer({ storage: storage})
 
 router.route("/").get(authenticate,getAllUsers);
 router.route("/:tokenID").get(authenticate, getSingleUser)
-router.route("/:userID").delete(authenticate, authorize(['admin']) , deleteUser ).patch( upload.single('image'), updateUser)
+router.route("/:userID").delete(authenticate, authorize(['admin']) , deleteUser ).patch( authenticate , authorize(['admin']) , upload.single('image'), updateUser).post(authenticate , authorize(['admin']) ,changePassword)
 router
   .route("/register")
   .post( 

@@ -147,7 +147,7 @@ const updateUser = asyncWrapper (async (req, res, next) => {
   if(req.file) {
     updateData.image = req.file.path;
   }
-  
+
   const user = await User.findByIdAndUpdate(
     {_id : req.params.userID},
     {
@@ -168,6 +168,38 @@ const updateUser = asyncWrapper (async (req, res, next) => {
   res.json({ status: "SUCCESS", data: { user: user } });
 })
 
+// change Password
+const changePassword = asyncWrapper(async (req, res, next) => {
+  console.log("password",req.body);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const err = { status: "ERROR", message: errors.array(), statusCode: 500 };
+    return next(err);
+  }
+
+
+  const user = await User.findByIdAndUpdate(
+    {_id : req.params.userID},
+    {
+      $set: { password: await bcrypt.hash(req.body.password, 10) },
+    },
+    { new: true, runValidators: true }
+  )
+
+  if (!user) {
+    const err = {
+      status: "ERROR",
+      message: "User not found",
+      statusCode: 404,
+    };
+    return next(err);
+  }
+
+  res.json({ status: "SUCCESS", data: { user: user } });
+
+})
+
+
 module.exports = {
   getAllUsers,
   createUser,
@@ -175,4 +207,5 @@ module.exports = {
   getSingleUser,
   deleteUser,
   updateUser,
+  changePassword,
 };
