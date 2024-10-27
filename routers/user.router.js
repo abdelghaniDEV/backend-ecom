@@ -28,7 +28,7 @@ const upload = multer({ storage: storage})
 
 router.route("/").get(authenticate,getAllUsers);
 router.route("/:tokenID").get(authenticate, getSingleUser)
-router.route("/:userID").delete(authenticate, authorize(['admin']) , deleteUser ).patch( authenticate , authorize(['admin']) , upload.single('image'), updateUser)
+router.route("/:userID").delete(authenticate, authorize(['admin']) , deleteUser ).patch( authenticate , authorize(['admin']) , upload.single('image'), updateUser).post(authenticate , authorize(['admin']) ,changePassword)
 router
   .route("/register")
   .post( 

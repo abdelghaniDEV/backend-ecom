@@ -4,6 +4,7 @@ const User = require("../models/users.model");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const cloudinary = require("cloudinary").v2;
+const mongoose = require("mongoose");
 
 
 
@@ -170,21 +171,30 @@ const updateUser = asyncWrapper (async (req, res, next) => {
 
 // change Password
 const changePassword = asyncWrapper(async (req, res, next) => {
-  console.log("password",req.body);
+  console.log("password", req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const err = { status: "ERROR", message: errors.array(), statusCode: 500 };
+    const err = { status: "ERROR", message: errors.array(), statusCode: 400 }; // تغيير إلى 400 لطلب غير صالح
     return next(err);
   }
 
+  // تحقق من أن userID هو ObjectId صالح
+  if (!mongoose.isValidObjectId(req.params.userID)) {
+    const err = {
+      status: "ERROR",
+      message: "Invalid user ID",
+      statusCode: 400,
+    };
+    return next(err);
+  }
 
   const user = await User.findByIdAndUpdate(
-    {_id : req.params.userID},
+    { _id: req.params.userID },
     {
       $set: { password: await bcrypt.hash(req.body.password, 10) },
     },
     { new: true, runValidators: true }
-  )
+  );
 
   if (!user) {
     const err = {
@@ -196,8 +206,8 @@ const changePassword = asyncWrapper(async (req, res, next) => {
   }
 
   res.json({ status: "SUCCESS", data: { user: user } });
+});
 
-})
 
 
 module.exports = {
