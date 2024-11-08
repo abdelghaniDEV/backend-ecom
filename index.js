@@ -25,6 +25,7 @@ const orderRoute = require("./routers/order.router.js")
 const customerRoute = require("./routers/customer.router.js")
 const analyticsRoutes = require("./routers/analyticsRoutes.js")
 const settingsRoute = require("./routers/setting.router.js")
+const templateRoute = require("./routers/template.router.js")
 
 app.use("/api/products", productRoute);
 app.use("/api/categories", categoryRoute);
@@ -34,6 +35,7 @@ app.use("/api/orders", orderRoute)
 app.use("/api/customers", customerRoute);
 app.use('/api/analytics', analyticsRoutes);
 app.use("/api/settings" , settingsRoute);
+app.use("/api/template" , templateRoute )
 
 app.use((err, req, res, next) => {
   res
