@@ -19,10 +19,11 @@ const getAllOrders = async (req, res) => {
 
 // // create a new order
 const createOrder = asyncWrapper(async (req, res) => {
-  const { name, email, products, totalPrice, address, zipCode } = req.body;
+  console.log(req.body)
+  const { name, email, products, totalPrice, address, zipCode , number , shipping } = req.body;
 
   // التحقق من صحة الحقول المطلوبة
-  if (!email || !name || !products || !totalPrice || !address || !zipCode) {
+  if (!email || !name || !products || !totalPrice || !address || !zipCode || !number) {
     return res.status(400).json({ status: "FAILURE", message: "جميع الحقول مطلوبة." });
   }
 
@@ -47,6 +48,8 @@ const createOrder = asyncWrapper(async (req, res) => {
     products,
     totalPrice,
     invoiceNumber,
+    number,
+    shipping,
   });
 
   await order.save();

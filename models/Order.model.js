@@ -5,6 +5,7 @@ const orderSchema = new mongoose.Schema({
   email: { type: String, required: true },
   address: { type: String, required: true},
   zipCode : { type: Number, required: true},
+  number: { type : String , required: false},
   products: [
     { 
       product: {
@@ -20,6 +21,7 @@ const orderSchema = new mongoose.Schema({
   totalPrice: { type: Number, required: true },
   createdAt: { type: Date, default: Date.now },
   invoiceNumber: { type: String, required: true, unique: true },
+  shipping : { type: String, required: true}
 });
 
 module.exports = mongoose.model('Order', orderSchema);
