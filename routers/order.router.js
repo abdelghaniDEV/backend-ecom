@@ -6,7 +6,7 @@ const { checkCache } = require('../middleware/cacheMiddleware');
 
 const router = express.Router();
 
-router.route('/').get(getAllOrders).post(authenticate,authorize(['admin']),createOrder);
+router.route('/').get(getAllOrders).post(createOrder);
 router.route('/:orderId').post(authenticate,authorize(['admin']),updateOrder).delete(authenticate,authorize(['admin']),deleteOrder)
 
 
