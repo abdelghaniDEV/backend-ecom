@@ -5,7 +5,7 @@ const { checkCache } = require('../middleware/cacheMiddleware');
 
 const router = express.Router();
 
-router.route('/').get(authenticate,getAllCustomer)
+router.route('/').get(getAllCustomer)
 router.route('/:customerId').delete(authenticate,authorize(['admin']),DeleteCustomer)
 
 

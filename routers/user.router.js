@@ -26,7 +26,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage})
 
-router.route("/").get(authenticate,getAllUsers);
+router.route("/").get(getAllUsers);
 router.route("/:tokenID").get(authenticate, getSingleUser)
 router.route("/:userID").delete(authenticate, authorize(['admin']) , deleteUser ).patch( authenticate , authorize(['admin']) , upload.single('image'), updateUser)
 router
