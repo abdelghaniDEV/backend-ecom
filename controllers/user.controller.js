@@ -72,6 +72,7 @@ const createUser = asyncWrapper(async (req, res, next) => {
 
 // login
 const loginUser = asyncWrapper(async (req, res, next) => {
+  console.log(req.body)
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const err = { status: "ERROR", message: errors.array(), statusCode: 500 };
