@@ -6,7 +6,7 @@ const path = require("path");
 const app = express();
 
 const port = process.env.PORT;
-app.use(cors({ origin: 'http://localhost:5175' }));
+
 
 // Connect to mongoose server
 mongoose.connect(process.env.MONGO_URL).then(() => {
